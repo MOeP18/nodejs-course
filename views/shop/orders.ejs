@@ -1,0 +1,35 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/orders.css">
+    </head>
+
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+        <main>
+            <% if (orders.length <= 0) { %>
+                <h1>Nothing there!</h1>
+            <% } else { %>
+                <ul class="orders">
+                    <% orders.forEach(order => { %>
+                        <li class="orders__item">
+                            <h1>Order - # <%= order._id %></h1>
+                            <ul class="orders__products">
+                                <% order.products.forEach(p => { %>
+                                    <li class="orders__products-item"><%= p.product.title %> (<%= p.quantity %>)</li>
+                                <% }); %>
+                            </ul>
+                            <% let totalPriceArray = [] %>
+                            <% order.products.forEach(p => { %> 
+                                <%let productPrice = p.product.price * p.quantity 
+                                totalPriceArray.push(productPrice);%> 
+                            <% }) %> 
+                            <% let array = [...totalPriceArray],sum;
+                            array = array.map(elem => sum = (sum || 0) + elem);%> 
+                                </div>
+                                <hr>
+                                <div class="centered" style="font-weight: 900;">Total Order Amount: <%= array[array.length-1] %> </div>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } %>
+        </main>
+        <%- include('../includes/end.ejs') %>
