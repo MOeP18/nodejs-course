@@ -42,8 +42,10 @@ form {
 
 .main-header__nav {
   height: 100%;
-  display: none;
+  width: 100%;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .main-header__item-list {
@@ -57,15 +59,26 @@ form {
   margin: 0 1rem;
   padding: 0;
 }
+.main-header__item button {
+  margin: 0 1rem;
+  padding: 0;
+  border: none;
+  background-color: inherit;
+  font-size: inherit;
+}
 
-.main-header__item a {
+.main-header__item a,
+.main-header__item button {
   text-decoration: none;
   color: white;
 }
 
 .main-header__item a:hover,
 .main-header__item a:active,
-.main-header__item a.active {
+.main-header__item a.active,
+.main-header__item button:hover,
+.main-header__item button:active,
+.main-header__item button.active {
   color: #ffeb3b;
 }
 
@@ -100,7 +113,14 @@ form {
   padding: 0;
 }
 
-.mobile-nav__item a {
+.mobile-nav__item button {
+  padding: 0;
+  border: none;
+  background-color: inherit;
+}
+
+.mobile-nav__item a,
+.mobile-nav__item button {
   text-decoration: none;
   color: black;
   font-size: 1.5rem;
@@ -109,7 +129,8 @@ form {
 
 .mobile-nav__item a:active,
 .mobile-nav__item a:hover,
-.mobile-nav__item a.active {
+.mobile-nav__item a.active,
+.mobile-nav__item button.active {
   background: #00695c;
   color: white;
   border-radius: 3px;
@@ -236,11 +257,13 @@ form {
   color: white;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .main-header__nav {
-    display: flex;
+    display: none;
   }
+}
 
+@media (min-width: 768px) {
   #side-menu-toggle {
     display: none;
   }

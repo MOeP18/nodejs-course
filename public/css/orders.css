@@ -10,7 +10,9 @@
 }
 
 .orders__item {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  border: 1px solid black;
+  border-radius: 0.25rem;
   padding: 1rem;
   margin-bottom: 1rem;
 }
