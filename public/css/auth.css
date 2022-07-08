@@ -1,14 +1,25 @@
 .login-form {
-  width: 25rem;
-  height: 15rem;
+  width: 35rem;
+  height: 20rem;
   max-width: 90%;
-  margin: 1.5rem auto;
+  margin: 5.5rem auto;
   display: block;
   border: 1px solid black;
   border-radius: 0.75rem;
   padding: 0.75rem;
   text-align: center;
+  font-size: larger;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 .login-form label {
-  margin-top: 1.5rem;
+  margin-top: 3rem;
+}
+
+.backgroundImage {
+  height: 96vh;
+  background-image: url("../images/jungle.jpg");
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }

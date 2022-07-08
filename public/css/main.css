@@ -137,13 +137,20 @@ form {
 }
 
 #side-menu-toggle {
-  border: 1px solid white;
+  border: 3px solid gray;
   font: inherit;
-  padding: 0.5rem;
   display: block;
   background: transparent;
-  color: white;
+  color: gray;
+  /* background-color: gray; */
   cursor: pointer;
+  width: 100%;
+  border-radius: 0.75rem;
+}
+
+#side-menu-toggle hr {
+  background-color: rgb(69, 68, 68);
+  width: 95%;
 }
 
 #side-menu-toggle:focus {
