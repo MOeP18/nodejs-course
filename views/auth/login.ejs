@@ -9,14 +9,14 @@
     <main class="backgroundImage">
         <form class="login-form" action="/login" method="POST">
             <div class="form-control">
-                <label for="email">E-Mail</label>
+                <label for="email" class="inner">E-Mail</label>
                 <input type="email" required name="email" id="email">
 
-                <label for="password">Password</label>
+                <label for="password" class="inner">Password</label>
                 <input type="password" required name="password" id="password">
             </div>
 
-            <button class="btn" type="submit">Login</button>
+            <button class="btn inner" type="submit">Login</button>
         </form>
     </main>
 <%- include('../includes/end.ejs') %>

@@ -1,8 +1,8 @@
 const { Schema, default: mongoose } = require("mongoose");
 
 const userSchema = new Schema({
-  name: { type: String, required: true },
   email: { type: String, required: true },
+  password: { type: String, required: true },
   cart: {
     items: [
       {
@@ -54,7 +54,6 @@ userSchema.methods.removeOneFromCart = function (productId) {
   const updatedCartItems = [...this.cart.items];
   let newQuantity = this.cart.items[cartProductIndex].quantity - 1;
   updatedCartItems[cartProductIndex].quantity = newQuantity;
-  console.log(updatedCartItems[cartProductIndex].quantity);
   if (updatedCartItems[cartProductIndex].quantity === 0) {
     return this.deleteItemFromCart(productId);
   }
