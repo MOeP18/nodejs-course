@@ -64,6 +64,7 @@ exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
   Product.findById(prodId)
     .then((product) => {
+      console.log(product);
       return req.user.addToCart(product);
     })
     .then((result) => {
@@ -115,6 +116,19 @@ exports.postOrder = (req, res, next) => {
       res.redirect("/orders");
     })
     .catch((err) => console.log(err));
+};
+
+exports.postDeleteOrder = (req, res, next) => {
+  const orderId = req.body.orderId;
+  console.log(orderId);
+  Order.findByIdAndRemove(orderId)
+    .then(async (order) => {
+      await order.save();
+      res.redirect("/orders");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.getOrders = (req, res, next) => {

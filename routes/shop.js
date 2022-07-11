@@ -24,6 +24,8 @@ router.post("/cart-decrease-item", shopController.postCartRemoveOne);
 
 router.post("/create-order", shopController.postOrder);
 
+router.post("/delete-order", shopController.postDeleteOrder);
+
 router.get("/orders", shopController.getOrders);
 
 module.exports = router;

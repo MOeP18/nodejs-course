@@ -26,7 +26,13 @@
                             array = array.map(elem => sum = (sum || 0) + elem);%> 
                                 </div>
                                 <hr>
-                                <div class="centered" style="font-weight: 900;">Total Order Amount: <%= array[array.length-1] %> </div>
+                                <div class="centered" style="font-weight: 900;" >Total Order Amount: <%= array[array.length-1] %> </div>
+                                <div class="deleteOrder">
+                                    <form action="/delete-order" method="POST">
+                                        <input type="hidden" name="orderId" value="<% order._id %>">
+                                        <button class="btn red" type="submit">Remove order</button>
+                                    </form>
+                                </div>
                         </li>
                     <% }); %>
                 </ul>

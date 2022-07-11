@@ -12,6 +12,7 @@ const userSchema = new Schema({
           required: true,
         },
         quantity: { type: Number, required: true },
+        title: { type: String, required: true },
       },
     ],
   },
@@ -24,12 +25,14 @@ userSchema.methods.addToCart = function (product) {
   let newQuantity = 1;
   const updatedCartItems = [...this.cart.items];
   if (cartProductIndex >= 0) {
+    //if cart is not empty
     newQuantity = this.cart.items[cartProductIndex].quantity + 1;
     updatedCartItems[cartProductIndex].quantity = newQuantity;
   } else {
     updatedCartItems.push({
       productId: product._id,
       quantity: newQuantity,
+      title: product.title,
     });
   }
   const updatedCart = {

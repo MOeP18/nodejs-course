@@ -91,21 +91,19 @@ exports.postSignup = (req, res, next) => {
       if (userDoc) {
         return res.redirect("/signup");
       }
-      return bcrypt
-        .hash(password, 12)
-        .then((hasshedPsw) => {
-          const user = new User({
-            email: email,
-            password: hasshedPsw,
-            cart: { items: [] },
-          });
-          return user.save();
-        })
-        .then(() => {
+      console.log(userDoc);
+      return bcrypt.hash(password, 12).then((hasshedPsw) => {
+        const user = new User({
+          email: email,
+          password: hasshedPsw,
+          cart: { items: [] },
+        });
+        return user.save().then(() => {
           req.session.isLoggedIn = true;
-          req.session.user = userDoc;
+          req.session.user = user;
           res.redirect("/");
         });
+      });
     })
     .catch((err) => {
       console.log(err);
