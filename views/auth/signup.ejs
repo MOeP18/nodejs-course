@@ -23,6 +23,7 @@
         <input type="password" required name="confirmPassword" id="confirmPassword" />
       </div>
 
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
       <button class="btn innerSign" type="submit">Signup</button>
     </form>
   </main>
