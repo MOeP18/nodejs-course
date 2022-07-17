@@ -280,6 +280,23 @@ form {
   text-decoration: none;
 }
 
+.user-message {
+  margin: auto;
+  width: 90%;
+  border: 1px solid #00695c;
+  border-radius: 0.75rem;
+  text-align: center;
+  padding: 0.5rem;
+}
+.user-message--error {
+  color: black;
+  border-color: rgb(176, 5, 5);
+  background: rgb(255, 66, 66);
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .main-header__nav {
     display: none;

@@ -2,18 +2,30 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 
 exports.getLogin = (req, res, next) => {
+  let message = req.flash("errorLogin");
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
   res.render("auth/login", {
     path: "/login",
     pageTitle: "Login",
-    isAuthenticated: false,
+    errorMessage: message,
   });
 };
 
 exports.getSignup = (req, res, next) => {
+  let message = req.flash("errorLogin");
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
   res.render("auth/signup", {
     path: "/signup",
     pageTitle: "Signup",
-    isAuthenticated: false,
+    errorMessage: message,
   });
 };
 
@@ -22,7 +34,8 @@ exports.postLogin = (req, res, next) => {
   const password = req.body.password;
   User.findOne({ email: email })
     .then((user) => {
-      if (!user) {
+      if (!user || password !== user.password) {
+        req.flash("errorLogin", "Invalid email or password.");
         return res.redirect("/login");
       }
       bcrypt
@@ -51,13 +64,16 @@ exports.getProfile = (req, res, next) => {
   res.render("auth/profile", {
     path: "/profile",
     pageTitle: "Profile",
-    isAuthenticated: true,
     userData: userData,
   });
 };
 
 exports.postProfile = (req, res, next) => {
   const newPassword = req.body.newPassword;
+  const confirmPassword = req.body.confirmPassword;
+  if (newPassword !== confirmPassword) {
+    return res.redirect("/profile");
+  }
   const userData = req.session.user;
   console.log("userData: ", userData);
   User.findByIdAndUpdate(userData._id)
@@ -89,6 +105,10 @@ exports.postSignup = (req, res, next) => {
   User.findOne({ email: email })
     .then((userDoc) => {
       if (userDoc) {
+        req.flash(
+          "errorLogin",
+          "Email exists already, please use different one."
+        );
         return res.redirect("/signup");
       }
       console.log(userDoc);

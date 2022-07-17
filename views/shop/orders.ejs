@@ -14,7 +14,9 @@
                             <h1>Order - # <%= order._id %></h1>
                             <ul class="orders__products">
                                 <% order.products.forEach(p => { %>
-                                    <li class="orders__products-item"><%= p.product.title %> (<%= p.quantity %>)</li>
+                                    <a href="/products/<%= p.product._id %>">
+                                        <li class="orders__products-item"><%= p.product.title %> (<%= p.quantity %>)</li>
+                                    </a>
                                 <% }); %>
                             </ul>
                             <% let totalPriceArray = [] %>
@@ -30,7 +32,7 @@
                                 <div class="deleteOrder">
                                     <form action="/delete-order" method="POST">
                                         <input type="hidden" name="orderId" value="<%= order._id %>">                                        
-                                        <input type="hidden" name="_csrf" value="<%= csrfToken %> " />
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                                         <button class="btn red" type="submit">Remove order</button>
                                     </form>
                                 </div>
