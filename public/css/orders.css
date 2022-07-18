@@ -10,7 +10,9 @@
 }
 
 .orders__item {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  border: 1px solid black;
+  border-radius: 0.25rem;
   padding: 1rem;
   margin-bottom: 1rem;
 }
@@ -22,13 +24,18 @@
   display: flex;
 }
 
+.orders__products a {
+  text-decoration: none;
+  color: inherit;
+  flex-grow: 1;
+}
+
 .orders__products-item {
   margin: 0.5rem 0;
   padding: 0.5rem;
   border: 1px solid #00695c;
   background-color: #00695c;
   color: white;
-  flex-grow: 1;
   text-align: center;
   margin-right: 1%;
   border-radius: 0.5rem;
@@ -38,4 +45,8 @@
   border: 1px solid #00695c;
   background-color: white;
   color: #00695c;
+}
+.deleteOrder {
+  display: flex;
+  justify-content: flex-end;
 }

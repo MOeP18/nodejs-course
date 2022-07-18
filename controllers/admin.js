@@ -90,6 +90,7 @@ exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
   Product.findByIdAndRemove(prodId)
     .then(() => {
+      req.user.deleteItemFromCart(prodId);
       res.redirect("/admin/products");
     })
     .catch((err) => console.log(err));
