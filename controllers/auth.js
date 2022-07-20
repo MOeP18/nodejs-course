@@ -1,5 +1,14 @@
 const bcrypt = require("bcryptjs");
+// const nodemailer = require("nodemailer");
 const User = require("../models/user");
+
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: "obchod.ucet88@gmail.com",
+//     pass: "MiroKorba8",
+//   },
+// });
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash("errorLogin");
@@ -83,7 +92,6 @@ exports.postProfile = (req, res, next) => {
       u.password = hashedPsw;
       const user = new User(u);
       user.save();
-      console.log(u);
       return res.redirect("/");
     })
     .catch((err) => {
@@ -122,6 +130,13 @@ exports.postSignup = (req, res, next) => {
           req.session.isLoggedIn = true;
           req.session.user = user;
           res.redirect("/");
+          // return transporter.sendMail({
+          //   to: email,
+          //   from: "shop@node-complete.com",
+          //   subject: "Succesfull signup on my online shop",
+          //   html: "<h1>Sign up succeeded!</h1>",
+          //   text: "Welcome!",
+          // });
         });
       });
     })
