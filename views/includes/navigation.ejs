@@ -17,7 +17,10 @@
       </li>
       <% if(isAuthenticated){ %>
       <li class="main-header__item">
-        <a class="<%= path === '/cart' ? 'active' : '' %>" href="/cart">Cart</a>
+        <a class="<%= path === '/cart' ? 'active' : '' %>" href="/cart">
+          <% if(cartItems){ %> <% if(cartItems > 0) {%> (<%=cartItems %>) Cart
+          <% } else{ %> Cart <% } %> <% } else { %> Cart <% } %>
+        </a>
       </li>
       <li class="main-header__item">
         <a class="<%= path === '/orders' ? 'active' : '' %>" href="/orders"

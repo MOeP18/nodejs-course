@@ -95,13 +95,26 @@ exports.postOrder = (req, res, next) => {
     .populate("cart.items.productId")
     .then((user) => {
       const products = user.cart.items.map((i) => {
-        return { quantity: i.quantity, product: { ...i.productId._doc } };
+        return {
+          quantity: i.quantity,
+          product: { ...i.productId._doc },
+        };
       });
+
+      const prices = user.cart.items.map((i) => {
+        return (amount = i.quantity * i.productId._doc.price);
+      });
+
+      let totalAmount = 0;
+      for (const price of prices) {
+        totalAmount += price;
+      }
+
       const order = new Order({
         user: { email: req.user.email, userId: req.user },
         products: products,
+        totalAmount: totalAmount.toFixed(2),
       });
-      console.log(order.user);
       return order.save();
     })
     .then(() => {

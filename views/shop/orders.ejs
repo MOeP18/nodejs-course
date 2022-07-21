@@ -8,6 +8,7 @@
             <% if (orders.length <= 0) { %>
                 <h1>Nothing there!</h1>
             <% } else { %>
+                <h2>Your Orders:</h2>
                 <ul class="orders">
                     <% orders.forEach(order => { %>
                         <li class="orders__item">
@@ -28,7 +29,7 @@
                             array = array.map(elem => sum = (sum || 0) + elem);%> 
                                 </div>
                                 <hr>
-                                <div class="centered" style="font-weight: 900;" >Total Order Amount: <%= array[array.length-1] %> </div>
+                                <div class="centered" style="font-weight: 900;" >Total Order Amount: <%= array[array.length-1].toFixed(2) %> </div>
                                 <div class="deleteOrder">
                                     <form action="/delete-order" method="POST">
                                         <input type="hidden" name="orderId" value="<%= order._id %>">                                        
