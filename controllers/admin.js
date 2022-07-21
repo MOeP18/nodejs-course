@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const user = require("../models/user");
 
 exports.getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {
@@ -18,12 +19,12 @@ exports.postAddProduct = (req, res, next) => {
     image,
     description,
     price,
+    creator: `This was created by: ${req.user.email}`,
     userId: req.user,
   });
   product
     .save()
     .then((result) => {
-      console.log("Created Product");
       res.redirect("/admin/products");
     })
     .catch((err) => {
@@ -32,7 +33,7 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.find()
+  Product.find({ userId: req.user._id })
     // .select("title price")
     // .populate("userId", 'name')
     .then((products) => {
@@ -74,21 +75,23 @@ exports.postEditProduct = (req, res, next) => {
   const updatedPrice = req.body.price;
   Product.findById(prodId)
     .then((product) => {
+      if (product.userId.toString() !== req.user._id.toString()) {
+        return res.redirect("/");
+      }
       product.title = updatedTitle;
       product.image = updatedImage;
       product.description = updatedDesc;
       product.price = updatedPrice;
-      return product.save();
-    })
-    .then((result) => {
-      res.redirect("/admin/products");
+      return product.save().then(() => {
+        res.redirect("/admin/products");
+      });
     })
     .catch((err) => console.log(err));
 };
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.findByIdAndRemove(prodId)
+  Product.deleteOne({ _id: prodId, userId: req.user._id })
     .then(() => {
       req.user.deleteItemFromCart(prodId);
       res.redirect("/admin/products");

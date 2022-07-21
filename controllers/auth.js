@@ -38,12 +38,28 @@ exports.getSignup = (req, res, next) => {
   });
 };
 
+exports.getProfile = (req, res, next) => {
+  let message = req.flash("errorPassword");
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
+  const userData = req.session.user;
+  res.render("auth/profile", {
+    path: "/profile",
+    pageTitle: "Profile",
+    userData: userData,
+    errorMessage: message,
+  });
+};
+
 exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   User.findOne({ email: email })
     .then((user) => {
-      if (!user || password !== user.password) {
+      if (!user) {
         req.flash("errorLogin", "Invalid email or password.");
         return res.redirect("/login");
       }
@@ -68,26 +84,16 @@ exports.postLogin = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-exports.getProfile = (req, res, next) => {
-  const userData = req.session.user;
-  res.render("auth/profile", {
-    path: "/profile",
-    pageTitle: "Profile",
-    userData: userData,
-  });
-};
-
 exports.postProfile = (req, res, next) => {
   const newPassword = req.body.newPassword;
   const confirmPassword = req.body.confirmPassword;
   if (newPassword !== confirmPassword) {
+    req.flash("errorPassword", "The two passwords do not match.");
     return res.redirect("/profile");
   }
   const userData = req.session.user;
-  console.log("userData: ", userData);
   User.findByIdAndUpdate(userData._id)
     .then(async (u) => {
-      console.log(u);
       const hashedPsw = await bcrypt.hash(newPassword, 12);
       u.password = hashedPsw;
       const user = new User(u);
@@ -119,7 +125,6 @@ exports.postSignup = (req, res, next) => {
         );
         return res.redirect("/signup");
       }
-      console.log(userDoc);
       return bcrypt.hash(password, 12).then((hasshedPsw) => {
         const user = new User({
           email: email,

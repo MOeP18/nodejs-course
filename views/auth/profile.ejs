@@ -6,6 +6,9 @@
 <body>
   <%- include('../includes/navigation.ejs') %>
     <main class="profileCont">
+      <% if(errorMessage){ %> 
+            <div class="user-message user-message--error"><%= errorMessage %> </div>
+        <% } %> 
         <div class="user">
             <div class="userInfo">Your Email:</div>
             <div class="data"><%= userData.email %></div>

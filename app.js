@@ -54,9 +54,15 @@ app.use((req, res, next) => {
 
 app.use(csrfProtection);
 app.use((req, res, next) => {
-  (res.locals.isAuthenticated = req.session.isLoggedIn),
-    (res.locals.csrfToken = req.csrfToken()),
-    next();
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  if (req.user) {
+    let cartItemsQuantity = 0;
+    req.user.cart.items.map((item) => {
+      cartItemsQuantity += item.quantity;
+    }),
+      (res.locals.cartItems = cartItemsQuantity);
+  }
+  (res.locals.csrfToken = req.csrfToken()), next();
 });
 
 app.use("/admin", adminRoutes);
