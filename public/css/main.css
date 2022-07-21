@@ -291,9 +291,10 @@ form {
 .user-message--error {
   color: black;
   border-color: rgb(176, 5, 5);
-  background: rgba(255, 0, 0, 0.5);
+  background: rgba(255, 0, 0, 0.8);
   padding: 0.5rem;
   font-size: 20px;
+  font-weight: 600;
   border-radius: 0.75rem;
   margin-bottom: 0.5rem;
   text-align: center;
