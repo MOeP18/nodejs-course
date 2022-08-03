@@ -17,7 +17,7 @@ const store = new MongoDbStore({
   uri: MONGODB_URI,
   collection: "sessions",
 });
-
+let adminUser = false;
 app.set("view engine", "ejs");
 app.set("views", "views");
 
@@ -55,6 +55,7 @@ app.use((req, res, next) => {
 app.use(csrfProtection);
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
+
   if (req.user) {
     let cartItemsQuantity = 0;
     req.user.cart.items.map((item) => {
@@ -62,9 +63,17 @@ app.use((req, res, next) => {
     }),
       (res.locals.cartItems = cartItemsQuantity);
   }
-  (res.locals.csrfToken = req.csrfToken()), next();
-});
+  (res.locals.adminUser = adminUser), (res.locals.csrfToken = req.csrfToken());
 
+  if (!req.session.user) {
+    return next();
+  }
+  if (req.session.user._id.toString() === "62ea0abeb9bc377f5d6376d0") {
+    adminUser = true;
+  }
+  console.log(res.locals);
+  next();
+});
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);

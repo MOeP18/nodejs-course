@@ -1,5 +1,5 @@
 const Product = require("../models/product");
-const user = require("../models/user");
+const User = require("../models/user");
 
 exports.getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {
@@ -33,9 +33,12 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.find({ userId: req.user._id })
-    // .select("title price")
-    // .populate("userId", 'name')
+  Product.find()
+    // { userId: req.user._id }
+    .select("title price description image")
+    .populate("userId", "email")
+    //I changed the way with which we edit product since there will be only one admin,
+    //  and users cannot add or edit products at all.
     .then((products) => {
       res.render("admin/products", {
         prods: products,
@@ -75,9 +78,9 @@ exports.postEditProduct = (req, res, next) => {
   const updatedPrice = req.body.price;
   Product.findById(prodId)
     .then((product) => {
-      if (product.userId.toString() !== req.user._id.toString()) {
-        return res.redirect("/");
-      }
+      // if (product.userId.toString() !== req.user._id.toString()) {
+      //   return res.redirect("/");
+      // } THIS WILL BE CHANGED ONCE ADMIN CREATES ALL PRODUCTS
       product.title = updatedTitle;
       product.image = updatedImage;
       product.description = updatedDesc;

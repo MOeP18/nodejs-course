@@ -83,7 +83,7 @@ exports.postLogin = (req, res, next) => {
             req.session.isLoggedIn = true;
             req.session.user = user;
             return req.session.save((err) => {
-              console.log(err);
+              err && console.log("error:", err);
               res.redirect("/");
             });
           }
@@ -120,7 +120,7 @@ exports.postProfile = (req, res, next) => {
 
 exports.postLogout = (req, res, next) => {
   req.session.destroy((err) => {
-    console.log("err:", err);
+    err && console.log("err:", err);
     res.redirect("/");
   });
 };
