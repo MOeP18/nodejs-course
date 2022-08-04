@@ -94,7 +94,12 @@ exports.postLogin = (req, res, next) => {
           res.redirect("/login");
         });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postProfile = (req, res, next) => {
@@ -115,6 +120,9 @@ exports.postProfile = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -150,10 +158,18 @@ exports.postSignup = (req, res, next) => {
       password: hasshedPsw,
       cart: { items: [] },
     });
-    return user.save().then(() => {
-      req.session.isLoggedIn = true;
-      req.session.user = user;
-      res.redirect("/");
-    });
+    return user
+      .save()
+      .then(() => {
+        req.session.isLoggedIn = true;
+        req.session.user = user;
+        res.redirect("/");
+      })
+      .catch(() => {
+        console.log(err);
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+      });
   });
 };
