@@ -33,12 +33,14 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: store,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
   })
 );
 
 const csrfProtection = csrf();
 
 app.use(flash());
+app.use(csrfProtection);
 
 app.use((req, res, next) => {
   if (!req.session.user) {
@@ -46,13 +48,17 @@ app.use((req, res, next) => {
   }
   User.findById(req.session.user._id)
     .then((user) => {
+      if (!user) {
+        return next();
+      }
       req.user = user;
       next();
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      throw new Error(err);
+    });
 });
 
-app.use(csrfProtection);
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
 
@@ -71,14 +77,19 @@ app.use((req, res, next) => {
   if (req.session.user._id.toString() === "62ea0abeb9bc377f5d6376d0") {
     adminUser = true;
   }
-  console.log(res.locals);
   next();
 });
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
+app.get("/500", errorController.get500);
+
 app.use(errorController.get404);
+
+app.use((error, req, res, next) => {
+  res.redirect("/500");
+});
 
 mongoose
   .connect(MONGODB_URI)

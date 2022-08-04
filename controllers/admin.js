@@ -24,21 +24,21 @@ exports.postAddProduct = (req, res, next) => {
   });
   product
     .save()
-    .then((result) => {
+    .then(() => {
       res.redirect("/admin/products");
     })
     .catch((err) => {
       console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
 exports.getProducts = (req, res, next) => {
   Product.find()
-    // { userId: req.user._id }
     .select("title price description image")
     .populate("userId", "email")
-    //I changed the way with which we edit product since there will be only one admin,
-    //  and users cannot add or edit products at all.
     .then((products) => {
       res.render("admin/products", {
         prods: products,
@@ -46,7 +46,12 @@ exports.getProducts = (req, res, next) => {
         path: "/admin/products",
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -67,7 +72,12 @@ exports.getEditProduct = (req, res, next) => {
         product: product,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -78,18 +88,27 @@ exports.postEditProduct = (req, res, next) => {
   const updatedPrice = req.body.price;
   Product.findById(prodId)
     .then((product) => {
-      // if (product.userId.toString() !== req.user._id.toString()) {
-      //   return res.redirect("/");
-      // } THIS WILL BE CHANGED ONCE ADMIN CREATES ALL PRODUCTS
+      if (
+        product.userId.toString() !== process.env.ADMIN_ID &&
+        req.session.user._id !== process.env.ADMIN_ID
+      ) {
+        return res.redirect("/");
+      }
       product.title = updatedTitle;
       product.image = updatedImage;
       product.description = updatedDesc;
       product.price = updatedPrice;
+      product.creator = req.user.email;
       return product.save().then(() => {
         res.redirect("/admin/products");
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postDeleteProduct = (req, res, next) => {
@@ -99,5 +118,10 @@ exports.postDeleteProduct = (req, res, next) => {
       req.user.deleteItemFromCart(prodId);
       res.redirect("/admin/products");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
