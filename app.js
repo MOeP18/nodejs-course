@@ -18,6 +18,7 @@ const store = new MongoDbStore({
   uri: MONGODB_URI,
   collection: "sessions",
 });
+// dummy comment
 let adminUser = false;
 app.set("view engine", "ejs");
 app.set("views", "views");
